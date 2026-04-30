@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KING STOR</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial, Tahoma;
+background:#f4f4f4;
+direction:rtl;
+}
+header{
+background:#000;
+color:gold;
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+header h1{margin:0;}
+.lang-btn{
+background:gold;
+border:none;
+padding:6px 12px;
+border-radius:5px;
+cursor:pointer;
+}
+section{padding:20px;}
+h2{color:#000;border-bottom:2px solid gold;display:inline-block;}
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-top:15px;
+}
+.product{
+background:#fff;
+padding:10px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+.product img{
+width:100%;
+height:220px;
+object-fit:cover;
+border-radius:10px;
+}
+select,button{
+width:100%;
+margin-top:6px;
+padding:8px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+button{
+background:#000;
+color:gold;
+border:none;
+cursor:pointer;
+}
+.cart{
+background:#fff;
+margin:20px;
+padding:15px;
+border-radius:10px;
+}
+.checkout{
+background:#000;
+color:gold;
+padding:12px;
+text-align:center;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
+}
+.policy{
+background:#fff;
+margin:20px;
+padding:15px;
+border-radius:10px;
+font-size:14px;
+line-height:1.8;
+}
+footer{
+text-align:center;
+padding:15px;
+background:#000;
+color:gold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>KING STOR</h1>
+<button class="lang-btn" onclick="switchLang()">FR</button>
+</header>
+
+<section>
+<h2 id="menTitle">القسم الرجالي</h2>
+<div class="products" id="men"></div>
+</section>
+
+<section>
+<h2 id="womenTitle">القسم النسائي</h2>
+<div class="products" id="women"></div>
+</section>
+
+<div class="cart">
+<h3 id="cartTitle">🛒 سلة المشتريات</h3>
+<div id="cartItems"></div>
+<p><strong id="totalText">المجموع:</strong> <span id="total">0</span> MAD</p>
+<div class="checkout" onclick="checkout()" id="orderBtn">📲 اطلب عبر واتساب</div>
+</div>
+
+<div class="policy">
+<h3 id="policyTitle">📜 سياسة التواصل والتوصيل</h3>
+<p id="policyText">
+📞 يتم التواصل مع الزبون عبر واتساب لتأكيد الطلب.<br>
+🚚 التوصيل متوفر لجميع المدن داخل المغرب.<br>
+💰 الدفع عند الاستلام.<br>
+⏱️ مدة التوصيل من 24 إلى 72 ساعة.<br>
+❌ لا يمكن إرجاع المنتج إلا في حالة وجود عيب.
+</p>
+</div>
+
+<footer>
+© 2026 KING STOR – All Rights Reserved
+</footer>
+
+<script>
+let lang="ar";
+let cart=[];
+let total=0;
+
+const sizes=["XS","S","M","L","XL","XXL"];
+const colors=["🖤 أسود","👑 ذهبي ملكي"];
+
+const menProducts=[
+{ar:"تيشيرت رجالي",fr:"T-shirt Homme",price:120},
+{ar:"سويت شيرت رجالي",fr:"Sweat Homme",price:180}
+];
+
+const womenProducts=[
+{ar:"قميص نسائي",fr:"Chemise Femme",price:150},
+{ar:"فستان عصري",fr:"Robe Moderne",price:230}
+];
+
+function productHTML(p){
+let sOptions=sizes.map(s=>`<option>${s}</option>`).join("");
+let cOptions=colors.map(c=>`<option>${c}</option>`).join("");
+return `
+<div class="product">
+<img src="https://via.placeholder.com/300">
+<h4>${lang==="ar"?p.ar:p.fr}</h4>
+<p>${p.price} MAD</p>
+<select>${sOptions}</select>
+<select>${cOptions}</select>
+<button onclick="addToCart('${lang==="ar"?p.ar:p.fr}',${p.price})">
+${lang==="ar"?"أضف للسلة":"Ajouter"}
+</button>
+</div>`;
+}
+
+function render(){
+document.getElementById("men").innerHTML=menProducts.map(productHTML).join("");
+document.getElementById("women").innerHTML=womenProducts.map(productHTML).join("");
+}
+
+function addToCart(name,price){
+cart.push({name,price});
+total+=price;
+renderCart();
+}
+
+function renderCart(){
+document.getElementById("cartItems").innerHTML=cart.map(i=>`<p>${i.name} - ${i.price} MAD</p>`).join("");
+document.getElementById("total").innerText=total;
+}
+
+function checkout(){
+let msg=lang==="ar"?"طلب جديد:%0A":"Nouvelle commande:%0A";
+cart.forEach(i=>msg+=`- ${i.name} (${i.price} MAD)%0A`);
+msg+=`%0A${lang==="ar"?"المجموع":"Total"}: ${total} MAD`;
+window.open("https://wa.me/212677669487?text="+msg,"_blank");
+}
+
+function switchLang(){
+lang=lang==="ar"?"fr":"ar";
+document.body.style.direction=lang==="ar"?"rtl":"ltr";
+document.querySelector(".lang-btn").innerText=lang==="ar"?"FR":"AR";
+document.getElementById("menTitle").innerText=lang==="ar"?"القسم الرجالي":"Homme";
+document.getElementById("womenTitle").innerText=lang==="ar"?"القسم النسائي":"Femme";
+document.getElementById("cartTitle").innerText=lang==="ar"?"🛒 سلة المشتريات":"🛒 Panier";
+document.getElementById("orderBtn").innerText=lang==="ar"?"📲 اطلب عبر واتساب":"📲 Commander via WhatsApp";
+document.getElementById("totalText").innerText=lang==="ar"?"المجموع:":"Total:";
+document.getElementById("policyTitle").innerText=lang==="ar"?"📜 سياسة التواصل والتوصيل":"📜 Politique";
+render();
+}
+
+render();
+</script>
+
+</body>
+</html>
