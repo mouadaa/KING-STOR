@@ -25,7 +25,7 @@ Visit your store at: **https://mouadaa.github.io/KING-STOR**
 
 ### For Admin:
 1. Scroll to the bottom right (⚙ Admin panel)
-2. Enter password: `1234`
+2. Enter password: `112233`
 3. Click "Login"
 4. Fill in product details and click "Add Product"
 
